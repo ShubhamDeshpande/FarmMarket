@@ -3,7 +3,7 @@
 <!-- Footer -->
 <footer>
        <div class="container">
-          Copyright &copy; by <a href="https://www.linkedin.com/in/priyankaphapale/"> Shubham Deshpande</a>
+          Copyright &copy; by <a href=""> Shubham Deshpande</a>
           All Rights Reserved from 2020 - 2028
        </div>
 </footer>
