@@ -9,9 +9,6 @@
   $sql_brand = "SELECT brand FROM brands WHERE id = '$brand_id'";
   $brand_query = $db->query($sql_brand);
   $brand = mysqli_fetch_assoc($brand_query);
-  $weight = $product['weights'];
-  $weight = rtrim($weight,',');
-  $weight_array = explode(',', $weight);
 ?>
 
 <!-- Details Modal-->
@@ -50,21 +47,6 @@
                     <input type="number" min="0" class="form-control" name="quantity" id="quantity">
                   </div><div class="col-xs-9"></div>
                 </div><br><br>
-
-                <div class="form-group"><br><br>
-                  <label for="size"> Weight:</label>
-                  <select name="size" id="size" class="form-control">
-                    <option value=""></option>
-                    <?php foreach($weight_array as $string) {
-                      $string_array = explode(':', $string);
-                      $weight_lb = $string_array[0];
-                      $available = $string_array[1];
-                      if ($available >0) {
-                          echo '<option value="'.$weight_lb.'" data-available="'.$available.'">'.$weight_lb.' ('.$available.' Available)</option>';
-                      }
-                    }
-                  </select>
-                </div>-->
               </form>
             </div>
           </div>

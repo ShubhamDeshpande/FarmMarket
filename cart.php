@@ -3,6 +3,7 @@
 	  include 'includes/head.php'; 
 	  include 'includes/navigation.php';
 	  include 'includes/headerpartial.php';
+	  echo "cart id";
 	  if ($cart_id != '') {
 	  	$cart_query = $db->query("SELECT * FROM cart WHERE id = '{$cart_id}'");
 	  	$result = mysqli_fetch_assoc($cart_query);
@@ -40,28 +41,13 @@
 							$product_id = $item['id'];
 							$product_query = $db->query("SELECT * FROM products WHERE id = '{$product_id}'");
 							$product = mysqli_fetch_assoc($product_query);
-							$weightArray = explode(',', $product['weights']);
-							foreach ($weightArray as $weightString) {
-								$w = explode(':', $weightString);
-								if ($w[0] == $item['weight']) {
-									$available = $w[1];
-								}
-							}
+	
 					?>
 						 <tr>
 							<td><?php echo $i;?></td>
 							<td><?php echo $product['title'];?></td>
 							<td><?php echo money($product['price']);?></td>
-							<td>
-								 <button class="btn btn-xs btn-primary" onclick="update_cart('removeone','<?=$product['id'];?>','<?=$item['weight'];?>');">-</button>
-								 <?php echo $item['quantity'];?>	
-								 <?php if($item['quantity']< $available): ?>
-								     <button class="btn btn-xs btn-primary" onclick="update_cart('addone','<?=$product['id'];?>','<?=$item['weight'];?>');">+</button>
-							     <?php else:?>
-							     	 <span class="text-danger">Max</span>
-							     <?php endif;?>
-							</td>
-							<td><?php echo $item['weight'];?></td>
+			
 							<td><?php echo money($item['quantity'] * $product['price']);?></td>
 					     </tr>
 					<?php 

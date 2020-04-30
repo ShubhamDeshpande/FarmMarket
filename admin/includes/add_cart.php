@@ -1,13 +1,10 @@
 <?php
 	require_once '../../core/init.php';
 	$product_id = $_POST['product_id'];
-	$weight = $_POST['size'];
 	$quantity = $_POST['quantity'];
-	$available = $_POST['available'];
 	$item = array();
 	$item[] = array(
 		'id'       => $product_id,
-		'weight'   => $weight,
 		'quantity' => $quantity,
 	);
 
@@ -26,11 +23,8 @@
 		$new_items = array();
 		// check if new added item is equal to any previous item
 		foreach ($previous_items as $previous_item) {
-			if ($item[0]['id'] == $previous_item['id'] && $item[0]['weight'] == $previous_item['weight']) {
+			if ($item[0]['id'] == $previous_item['id']) {
 				$previous_item['quantity'] = $previous_item['quantity']+$item[0]['quantity'];
-				if ($previous_item['quantity']> $available) {
-					$previous_item['quantity'] = $available;
-				}
 				$item_match = 1;
 			}
 			$new_items[] = $previous_item;

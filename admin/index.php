@@ -111,20 +111,12 @@
 		$lowItems = array();
 		while($product = mysqli_fetch_assoc($inventoryQuery)){
 			$item = array();
-			$weights = weightsToArray($product['weights']);
-			foreach ($weights as $weight) {
-				if($weight['quantity'] != $weight['threshold']){
-					$category = get_category($product['categories']);
-					$item = array(
+			$category = get_category($product['categories']);
+			$item = array(
 						'title' => $product['title'],
-						'weight' => $weight['weight'],
-						'quantity' => $weight['quantity'],
-						'threshold' => $weight['threshold'],
 						'category' => $category['parent'].' / '.$category['child']
-					);
-					$lowItems[] = $item;
-			    }
-			}
+			);
+			$lowItems[] = $item;
 		}
 	?>
 	<div class="col-md-8">
@@ -133,7 +125,6 @@
 			<thead class="bg-primary">
 				<th>Product</th>
 				<th>Category</th>
-				<th>Weight</th>
 				<th>Quantity</th>
 				<th>Threshold</th>
 			</thead>
@@ -142,7 +133,6 @@
 					<tr <?php echo ($item['quantity'] == 0 )? ' class="danger"':'';?>>
 						<td><?php echo $item['title'];?></td>
 						<td><?php echo $item['category'];?></td>
-						<td><?php echo $item['weight'];?></td>
 						<td><?php echo $item['quantity'];?></td>
 						<td><?php echo $item['threshold'];?></td>
 					</tr>

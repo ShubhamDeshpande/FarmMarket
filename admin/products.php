@@ -36,8 +36,6 @@
       $price = ((isset($_POST['price']) && !empty($_POST['price']))? $_POST['price']:'');
       $list_price = ((isset($_POST['list_price']) && !empty($_POST['list_price']))? $_POST['list_price']:'');
       $description = ((isset($_POST['description']) && !empty($_POST['description']))? $_POST['description']:'');
-      $weights = ((isset($_POST['weights']) && $_POST['weights'] != '')? $_POST['weights']:'');
-      $weights = rtrim($weights,',');
       $saved_image = '';
 
       if (isset($_GET['edit'])) {
@@ -60,33 +58,12 @@
           $price = ((isset($_POST['price']) && $_POST['price'] != '')?$_POST['price']:$edit_product['price']);
           $list_price = ((isset($_POST['list_price']))?$_POST['list_price']:$edit_product['list_price']);
           $description = ((isset($_POST['description']))?$_POST['description']:$edit_product['description']);
-          $weights = ((isset($_POST['weights']) && $_POST['weights'] != '')?$_POST['weights']:$edit_product['weights']);
-          $weights = rtrim($weights,',');
           $saved_image = ((isset($_POST['image']) && $_POST['image'] != '')?$_POST['image']:$edit_product['image']);
           //$saved_image = (($edit_product['image'] != '')?$edit_product['image']:'');
           $dbpath = $saved_image;
 
       }
 
-      if (!empty($weights)) {
-          $weightString = $weights;
-          $trimWeightString = rtrim($weightString,','); 
-          $weightsArray = explode(',',$trimWeightString);
-          $wArray = array();
-          $qArray = array();
-          $tArray = array();
-          foreach ($weightsArray as $ws) {
-              $w = explode(':', $ws);
-              $wArray[] = $w[0];
-              $qArray[] = $w[1]; 
-              $tArray[] = $w[2];
-          }
-      }
-      else{
-          $weightsArray = array();
-      }
-      
-      $weightsArray = array();
       if ($_POST) {
           //get products parameters
           $title = $_POST['title'];
@@ -95,12 +72,11 @@
             $categories = $_POST['child'];
           }
           $price = $_POST['price'];
-          //$list_price = $_POST['list_price'];
-          $weights = $_POST['weights'];
+          //$list_price = $_POST['list_price']
           //$description = $_POST['description'];
 
             $errors = array();
-            $required = array('title','brand','price','parent','child','weights');
+            $required = array('title','brand','price','parent','child');
             foreach ($required as $field) {
                 if ($_POST[$field]=='') {
                   $errors[] = "All fields (*) are required";
@@ -141,10 +117,10 @@
             }
             else{
                 //upload file and insert into database
-                $insert_product_query = "INSERT INTO `products` (`title`,`price`,`list_price`,`brand`,`categories`,`image`,`description`,`weights`) VALUES ('$title','$price','$list_price','$brand','$categories','$dbpath','$description','$weights')";
+                $insert_product_query = "INSERT INTO `products` (`title`,`price`,`list_price`,`brand`,`categories`,`image`,`description`) VALUES ('$title','$price','$list_price','$brand','$categories','$dbpath','$description')";
 
                 if (isset($_GET['edit'])) {
-                    $insert_product_query = "UPDATE `products` SET `title` = '$title', `price` = '$price', `list_price` = '$list_price', `brand` = '$brand', `categories` = '$categories', `image` = '$dbpath', `description` = '$description', `weights` = '$weights' WHERE `id` = '$edit_id'";
+                    $insert_product_query = "UPDATE `products` SET `title` = '$title', `price` = '$price', `list_price` = '$list_price', `brand` = '$brand', `categories` = '$categories', `image` = '$dbpath', `description` = '$description' WHERE `id` = '$edit_id'";
                 }
                 if (mysqli_query($db,$insert_product_query)) {
                       $msg = "New Product Added";
@@ -206,14 +182,6 @@
           <label for="list_price">List Price:</label>
           <input id="list_price" type="text" name="list_price" class="form-control" value="<?php echo $list_price;?>">
       </div>
-      <div class="form-group col-md-3">
-          <label>Quantity & Weights *:</label>
-          <button class="btn btn-primary form-control" onclick="$('#weightsModal').modal('toggle');return false;">Quanity & Weights</button>
-      </div>
-      <div class="form-group col-md-3">
-          <label for="weights">Weights & Qty Preview</label>
-          <input class="form-control" type="text" name="weights" id="weights" value="<?php echo $weights;?>" readonly>
-      </div>
       <div class="form-group col-md-6">
           <?php if($saved_image != ''): ?>
               <div class="saved_image">
@@ -235,39 +203,7 @@
       </div><div class="clearfix"></div>
   </form>
 
-  <!-- Modal -->
-<div class="modal fade" id="weightsModal" tabindex="-1" role="dialog" aria-labelledby="weightsModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="weightsModalLabel">Quantity & Weights</h4>
-      </div>
-      <div class="modal-body">
-          <div class="container-fluid">
-              <?php for ($i=1; $i <=12 ; $i++): ?>
-                  <div class="form-group col-md-2">
-                      <label for="weight<?=$i;?>">Weight:</label>
-                      <input type="text" name="weight<?=$i;?>" id="weight<?=$i;?>" value="<?=((!empty($wArray[$i-1]))? $wArray[$i-1]:'');?>" class="form-control">
-                  </div>
-                  <div class="form-group col-md-2">
-                      <label for="quantity<?=$i;?>">Quantity:</label>
-                      <input type="number" name="quantity<?=$i;?>" id="quantity<?=$i;?>" value="<?=((!empty($qArray[$i-1]))? $qArray[$i-1]:'');?>" min="0" class="form-control">
-                  </div>
-                   <div class="form-group col-md-2">
-                      <label for="threshold<?=$i;?>">Threshold:</label>
-                      <input type="number" name="threshold<?=$i;?>" id="threshold<?=$i;?>" value="<?=((!empty($tArray[$i-1]))? $tArray[$i-1]:'');?>" min="0" class="form-control">
-                  </div>
-              <?php endfor; ?>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="updateWeights(); $('weightsModal').modal('toggel');return false; ">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> 
+
 
 <!--UI display code when Add Product is not clicked -->
 <?php
@@ -340,7 +276,6 @@
                           $product_image = $get_product_row['image'];
                           $product_description = $get_product_row['description'];
                           $product_featured = $get_product_row['featured'];
-                          $product_weights = $get_product_row['weights'];
                           $product_deleted = $get_product_row['deleted'];
                       ?>
                       <tr>

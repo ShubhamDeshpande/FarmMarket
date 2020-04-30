@@ -53,7 +53,6 @@
 		<th>Quantity</th>
 		<th>Title</th>
 		<th>Category</th>
-		<th>Weight</th>
 	</thead>
 	<tbody>
 		<?php foreach($products as $product): ?>
@@ -61,7 +60,6 @@
 				<td><?php echo $product['quantity'];?></td>
 				<td><?php echo $product['title'];?></td>
 				<td><?php echo $product['parent'].' / '.$product['child'];?></td>
-				<td><?php echo $product['weight'];?></td>
 			</tr>
 	    <?php endforeach; ?>
 	</tbody>

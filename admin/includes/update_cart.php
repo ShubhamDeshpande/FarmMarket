@@ -1,7 +1,6 @@
 <?php
 	require_once '../../core/init.php';
 	$mode = sanitize($_POST['mode']);
-	$edit_weight = sanitize($_POST['edit_weight']);
 	$edit_id = sanitize($_POST['edit_id']);
 
 	$cart_query = $db->query("SELECT * FROM cart WHERE id = '{$cart_id}'");
@@ -14,7 +13,7 @@
     // Decresing Item Quantity
 	if ($mode == 'removeone') {
 		foreach ($items as $item) {
-			if ($item['id']== $edit_id && $item['weight'] == $edit_weight) {
+			if ($item['id']== $edit_id) {
 				$item['quantity'] = $item['quantity'] - 1;
 			}
 			if ($item['quantity']>0) {
@@ -26,10 +25,8 @@
 	// Increasing Item Quantity
 	if ($mode == 'addone') {
 		foreach ($items as $item) {
-			if ($item['id']== $edit_id && $item['weight'] == $edit_weight) {
-				$item['quantity'] = $item['quantity'] + 1;
-			}
-			$updated_items[] = $item;
+			$item['quantity'] = $item['quantity'] + 1;
+		$updated_items[] = $item;
 		}
 	}
 

@@ -47,18 +47,17 @@
 
   function add_to_cart(){
       $('#modal_errors').html("");
-      var weight = $('#size').val();
       var quantity = $('#quantity').val();
-      var available = $('#available').val();
+      var available = 3;
       var error = '';
       var data = $('#add_product_form').serialize();
 
-      if (weight=='' || quantity == '' || quantity == 0) {
-         error += '<p class="text-warning text-center"> Please select weight and quantity.</p>';
+      if (quantity == '' || quantity == 0) {
+         error += '<p class="text-warning text-center"> Please select quantity.</p>';
          $('#modal_errors').html(error);
          return;
       }
-      else if(quantity>available){
+      else if(quantity>3){
           error += '<p class="text-warning text-center"> There are only '+available+' available.</p>';
           $('#modal_errors').html(error);
           return;
@@ -76,8 +75,8 @@
       }
   }
 
-  function update_cart(mode,edit_id,edit_weight){
-      var data = {'mode':mode,'edit_id':edit_id,'edit_weight':edit_weight};
+  function update_cart(mode,edit_id){
+      var data = {'mode':mode,'edit_id':edit_id};
       $.ajax({
           url: '/E-Commerce-Website/admin/includes/update_cart.php',
           method : 'post',

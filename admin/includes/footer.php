@@ -10,16 +10,7 @@
 
   <script>
 
-      function updateWeights(){
-          var weightString = '';
-          for(var i=1;i<=12;i++){
-              if ($('#weight'+i).val() != '') {
-                  weightString += $('#weight'+ i).val()+':'+$('#quantity'+i).val()+':'+$('#threshold'+i).val()+',';
-              }
-          }
-          $('#weights').val(weightString);
-      }
-
+      
   		function get_child_options(selected){
         if (typeof selected === 'undefined') {
           var selected = '';
